@@ -1,6 +1,9 @@
 class Main {
   preload() {
     this.load.image('player', '../assets/player.png')
+    this.load.image('wallV', '../assets/wallVertical.png')
+    this.load.image('wallH', '../assets/wallHorizontal.png')
+    this.load.image('coin', '../assets/coin.png')
   }
 
   createWorld() {
@@ -21,14 +24,18 @@ class Main {
   }
 
   create (){
-    this.player = this.physics.add.sprite(250,170,'player')
+    this.player = this.physics.add.sprite(250, 170, 'player')
     this.player.body.gravity.y = 500
+    
+    this.coin = this.physics.add.sprite(60, 130, 'coin')
+
+    this.scoreLabel = this.add.text(30, 25, 'score: 0', {
+      font: '18px arial', fill: '#fff'
+    })
+
+    this.score = 0;
 
     this.arrow = this.input.keyboard.createCursorKeys();
-
-    this.load.image('wallV', '../assets/wallVertical.png')
-    this.load.image('wallH', '../assets/wallHorizontal.png')
-
     this.createWorld()
   }
 
@@ -56,6 +63,34 @@ class Main {
     if(this.player.y > 340 || this.player.y < 0){
       this.playerDie()
     }
+
+    if(this.physics.overlap(this.player, this.coin)){
+      this.takeCoin()
+    }
+  }
+
+  updateCoinPosition(){
+    let positions = [
+      {x: 140, y:60},
+      {x: 360, y:60},
+      {x: 60, y:60},
+      {x: 440, y:140},
+      {x: 130, y:300},
+      {x: 370, y:300},
+    ]
+
+    positions = positions.filter(coin => coin.x !== this.coin.x)
+
+    let newPosition = Phaser.Math.RND.pick(positions)
+
+    this.coin.setPosition(newPosition.x, newPosition.y)
+  }
+
+  takeCoin() {
+    this.updateCoinPosition()
+
+    this.score += 5
+    this.scoreLabel.setText('scroe:' + this.score)
   }
 
   playerDie() {
