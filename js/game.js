@@ -5,9 +5,32 @@ class Main {
 
   create (){
     this.player = this.physics.add.sprite(250,170,'player')
+    this.player.body.gravity.y = 500
+
+    // this.up = this.input.keyboard.addKey('up')
+    // this.left = this.input.keyboard.addKey('left')
+    // this.right = this.input.keyboard.addKey('right')
+    this.arrow = this.input.keyboard.createrCursorKeys();
+  }
+
+  movePlayer() {
+    if(this.arrow.left.isDown){
+      this.player.body.velocity.x = -200;
+    }
+    else if(this.arrow.right.isDown) {
+      this.player.body.velocity.x = 200;
+    }
+    else{
+      this.player.body.velocity.x = 0;
+    }
+
+    if(this.arrow.up.isDown && this.player.body.onFloor()){
+      this.player.body.velocity.y = -320;
+    }
   }
 
   update() {
+    this.movePlayer()
   }
 }
 
