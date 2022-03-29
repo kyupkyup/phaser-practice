@@ -50,7 +50,15 @@ class Main {
     this.createWorld()
   }
 
-  movePlayer() {
+  movePlayer() {  
+    if(this.arrow.up.isDown && this.player.body.onFloor()){
+      this.player.body.velocity.y = -320;
+    }
+
+    if(this.arrow.space.isDown && this.player.body.onFloor()){
+      this.player.body.velocity.y = -320;
+    }
+
     if(this.arrow.left.isDown){
       this.player.body.velocity.x = -200;
     }
@@ -61,9 +69,7 @@ class Main {
       this.player.body.velocity.x = 0;
     }
 
-    if(this.arrow.up.isDown && this.player.body.onFloor()){
-      this.player.body.velocity.y = -320;
-    }
+
   }
 
 
