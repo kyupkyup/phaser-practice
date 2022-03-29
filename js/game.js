@@ -51,11 +51,13 @@ class Main {
   }
 
   movePlayer() {  
-    if(this.arrow.up.isDown && this.player.body.onFloor()){
+    console.log(this.player)
+    console.log(this.arrow)
+    if(this.arrow.up.isDown){
       this.player.body.velocity.y = -320;
     }
 
-    if(this.arrow.space.isDown && this.player.body.onFloor()){
+    if(this.arrow.space.isDown){
       this.player.body.velocity.y = -320;
     }
 
@@ -68,8 +70,6 @@ class Main {
     else{
       this.player.body.velocity.x = 0;
     }
-
-
   }
 
 
