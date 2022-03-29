@@ -51,16 +51,6 @@ class Main {
   }
 
   movePlayer() {  
-    console.log(this.player)
-    console.log(this.arrow)
-    if(this.arrow.up.isDown){
-      this.player.body.velocity.y = -320;
-    }
-
-    if(this.arrow.space.isDown){
-      this.player.body.velocity.y = -320;
-    }
-
     if(this.arrow.left.isDown){
       this.player.body.velocity.x = -200;
     }
@@ -69,6 +59,14 @@ class Main {
     }
     else{
       this.player.body.velocity.x = 0;
+    }
+
+    if(this.arrow.up.isDown && this.player.body.onFloor()){
+      this.player.body.velocity.y = -320;
+    }
+
+    if(this.arrow.space.isDown && this.player.body.onFloor()){
+      this.player.body.velocity.y = -320;
     }
   }
 
