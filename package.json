@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server index.html"
+    "start": "live-server index.html",
+    "deploy": "gh-pages"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/kyupkyup/phaser-practice/issues"
   },
-  "homepage": "https://github.com/kyupkyup/phaser-practice#readme"
+  "homepage": "https://github.com/kyupkyup/phaser-practice#readme",
+  "dependencies": {
+    "gh-pages": "^3.2.3"
+  }
 }

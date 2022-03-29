@@ -1,9 +1,11 @@
 class Main {
   preload() {
+    this.load.image('background', '../assets/background.png')
     this.load.image('player', '../assets/player.png')
     this.load.image('wallV', '../assets/wallVertical.png')
     this.load.image('wallH', '../assets/wallHorizontal.png')
     this.load.image('coin', '../assets/coin.png')
+    this.load.image('enemy', '../assets/enemy.png')
   }
 
   createWorld() {
@@ -33,6 +35,15 @@ class Main {
       font: '18px arial', fill: '#fff'
     })
 
+    this.enemies = this.physics.add.group()
+
+    this.time.addEvent({
+      delay: 1000,
+      callback: () => this.addEnemy(),
+      loop: true,
+    })
+
+
     this.score = 0;
 
     this.arrow = this.input.keyboard.createCursorKeys();
@@ -55,10 +66,28 @@ class Main {
     }
   }
 
+
+  addEnemy () {
+    let enemy = this.enemies.create(250, 30, 'enemy')
+    enemy.body.gravity.y = 500;
+    enemy.body.velocity.x = Phaser.Math.RND.pick([-100, 100])
+    enemy.body.bounce.x = 1;
+
+    this.time.addEvent({
+      delay: 10000,
+      callback: () => enemy.destroy()
+    })
+  }
+
   update() {
     this.movePlayer()
 
     this.physics.collide(this.player, this.walls)  
+    this.physics.collide(this.enemies, this.walls)
+
+    if(this.physics.overlap(this.player, this.enemies)){
+      this.playerDie()
+    }
 
     if(this.player.y > 340 || this.player.y < 0){
       this.playerDie()
@@ -94,8 +123,16 @@ class Main {
   }
 
   playerDie() {
-    console.log('죽음')
+    this.writeScore(this.score)
     this.scene.start('main')
+  }
+
+  writeScore (score){
+    const scoreBoard = document.getElementById('score_board')
+    if(scoreBoard.children.length > 4 ) scoreBoard.removeChild(scoreBoard.children[scoreBoard.children.length - 1])
+    const $score = document.createElement('p')
+    $score.textContent = score
+    scoreBoard.prepend($score)
   }
 }
 
