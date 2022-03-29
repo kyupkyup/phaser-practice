@@ -3,14 +3,33 @@ class Main {
     this.load.image('player', '../assets/player.png')
   }
 
+  createWorld() {
+    this.walls = this.physics.add.staticGroup()
+
+    this.walls.create(10, 170, 'wallV')
+    this.walls.create(490, 170, 'wallV')
+    
+    this.walls.create(50, 10, 'wallH')
+    this.walls.create(420, 10, 'wallH')
+    this.walls.create(50, 330, 'wallH')
+    this.walls.create(420, 330, 'wallH')
+
+    this.walls.create(0, 170, 'wallH')
+    this.walls.create(450, 170, 'wallH')
+    this.walls.create(250, 90, 'wallH')
+    this.walls.create(250, 250, 'wallH')
+  }
+
   create (){
     this.player = this.physics.add.sprite(250,170,'player')
     this.player.body.gravity.y = 500
 
-    // this.up = this.input.keyboard.addKey('up')
-    // this.left = this.input.keyboard.addKey('left')
-    // this.right = this.input.keyboard.addKey('right')
-    this.arrow = this.input.keyboard.createrCursorKeys();
+    this.arrow = this.input.keyboard.createCursorKeys();
+
+    this.load.image('wallV', '../assets/wallVertical.png')
+    this.load.image('wallH', '../assets/wallHorizontal.png')
+
+    this.createWorld()
   }
 
   movePlayer() {
@@ -31,6 +50,17 @@ class Main {
 
   update() {
     this.movePlayer()
+
+    this.physics.collide(this.player, this.walls)  
+
+    if(this.player.y > 340 || this.player.y < 0){
+      this.playerDie()
+    }
+  }
+
+  playerDie() {
+    console.log('죽음')
+    this.scene.start('main')
   }
 }
 
