@@ -84,11 +84,16 @@ class Main {
   }
 
   update() {
-    this.movePlayer()
+
 
     this.physics.collide(this.player, this.walls)  
     this.physics.collide(this.enemies, this.walls)
 
+    if(!this.player.active){
+      return
+    }
+    this.movePlayer()
+    
     if(this.physics.overlap(this.player, this.enemies)){
       this.playerDie()
     }
