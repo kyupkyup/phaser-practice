@@ -17,6 +17,26 @@ class Play{
   }
 
   create (){
+    this.jumpSound = this.sound.add('jump')
+    this.coinSound = this.sound.add('coin')
+    this.deadSound = this.sound.add('dead')
+    // this.music = this.load.audio('music')
+    // this.music.loop = true;
+    // this.music.play()
+
+    this.anims.create({
+      key: 'right',
+      frames: this.anims.generateFrameNumbers('player', {frames: [1,2]}),
+      frameRate: 8,
+      repeat: -1
+    })
+    this.anims.create({
+      key: 'left',
+      frames: this.anims.generateFrameNumbers('player', {frames: [3,4]}),
+      frameRate: 8,
+      repeat: -1
+    })
+
     this.player = this.physics.add.sprite(250, 170, 'player')
     this.player.body.gravity.y = 500
     
@@ -44,20 +64,25 @@ class Play{
   movePlayer() {  
     if(this.arrow.left.isDown){
       this.player.body.velocity.x = -200;
+      this.player.anims.play('left', true)
     }
     else if(this.arrow.right.isDown) {
       this.player.body.velocity.x = 200;
+      this.player.anims.play('right', true)
     }
     else{
       this.player.body.velocity.x = 0;
+      this.player.setFrame(0)
     }
 
     if(this.arrow.up.isDown && this.player.body.onFloor()){
       this.player.body.velocity.y = -320;
+      this.jumpSound.play()
     }
 
     if(this.arrow.space.isDown && this.player.body.onFloor()){
       this.player.body.velocity.y = -320;
+      this.jumpSound.play()
     }
   }
 
@@ -74,15 +99,7 @@ class Play{
     })
   }
 
-  update() {
-    this.physics.collide(this.player, this.walls)  
-    this.physics.collide(this.enemies, this.walls)
-
-    if(!this.player.active){
-      return
-    }
-    this.movePlayer()
-    
+  playerDie(){
     if(this.physics.overlap(this.player, this.enemies)){
       this.playerDie()
     }
@@ -94,6 +111,32 @@ class Play{
     if(this.physics.overlap(this.player, this.coin)){
       this.takeCoin()
     }
+  }
+
+  update() {
+    this.physics.collide(this.player, this.walls)  
+    this.physics.collide(this.enemies, this.walls)
+
+    if(!this.player.active){
+      return
+    }
+    this.movePlayer()
+
+    if(this.physics.overlap(this.player, this.enemies)){
+      this.playerDie()
+      this.deadSound.play()
+    }
+
+    if(this.player.y > 340 || this.player.y < 0){
+      this.playerDie()
+      this.deadSound.play()
+    }
+
+    if(this.physics.overlap(this.player, this.coin)){
+      this.takeCoin()
+      this.coinSound.play()
+    }
+  
   }
 
   updateCoinPosition(){
